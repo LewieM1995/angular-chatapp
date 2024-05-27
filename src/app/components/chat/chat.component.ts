@@ -51,7 +51,7 @@ export class ChatComponent implements OnInit {
 
   sendMessage(message: string) {
     if (this.connection) {
-      const userName = this.userProfile?.name || "Anonymous"; // Assuming the user's name is stored in the userProfile object
+      const userName = this.userProfile?.name || "Anonymous";
       const messageWithUser = `${userName}: ${message}`;
       this.connection.next(messageWithUser);
       this.clearInputField();
@@ -73,7 +73,7 @@ export class ChatComponent implements OnInit {
 
     // Close WebSocket connection if it exists
     if (this.connection) {
-      this.connection.complete(); // Assuming complete() properly closes the connection
+      this.connection.complete();
     }
 
     // Redirect to home page
