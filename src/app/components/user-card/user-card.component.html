@@ -1,0 +1,11 @@
+
+
+<div *ngIf="userProfile" class="max-w-sm mx-auto bg-white shadow-md rounded-lg">
+    <div class="flex items-center px-6 py-4">
+        <img class="w-16 h-16 rounded-full object-cover" [src]="userProfile.picture" alt="{{ userProfile.name }}">
+        <div class="ml-4">
+            <h2 class="text-xl font-semibold text-gray-800">{{ userProfile.name }}</h2>
+            <p class="text-gray-600">{{ userProfile.email }}</p>
+        </div>
+    </div>
+</div>

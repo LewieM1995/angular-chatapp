@@ -1,0 +1,42 @@
+<div class="min-h-screen flex flex-col items-center bg-gray-100 p-4">
+  <!-- User Card Section -->
+  <div class="w-full max-w-md bg-white shadow-lg rounded-lg p-6 mb-6">
+    <app-user-card></app-user-card>
+    <button
+      (click)="onSignOut()"
+      class="mt-4 w-full py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50"
+    >
+      Sign Out
+    </button>
+  </div>
+
+  <!-- Chat Section -->
+  <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-6">
+    <h1 class="text-2xl font-semibold mb-4 text-center">
+      WebSocket Client Chat
+    </h1>
+    <div class="space-y-4">
+      <div *ngFor="let message of messages" class="p-3 bg-gray-200 rounded-lg">
+        {{ message }}
+      </div>
+    </div>
+    
+    <!-- Input and Send Button Section -->
+    <div class="mt-4 flex"> <!-- Added flex class to create a flex container -->
+      <input
+        id='messageInput'
+        #messageInput
+        class="flex-1 py-2 px-4 bg-white text-gray-800 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+        type="text"
+        placeholder="Type a message..."
+        (keydown.enter)="sendMessage(messageInput.value)"
+      />
+      <button
+        (click)="sendMessage(messageInput.value)"
+        class="py-2 px-4 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+      >
+        Send
+      </button>
+    </div>
+  </div>
+</div>
