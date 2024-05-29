@@ -43,12 +43,6 @@ export class ChatComponent implements OnInit {
       // Update user profile in UserService
       this.userService.setUserProfile(this.userProfile);
 
-      /* Only establish WebSocket connection if running in the browser
-      this.connection = this.WebsocketService.connect(this.wsUrl);
-
-      this.connection.subscribe((event: MessageEvent) => {
-        this.messages.push(event.data);
-      }); */
     }
   }
 
