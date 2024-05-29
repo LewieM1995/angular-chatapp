@@ -6,15 +6,15 @@ import { Observable, Subject } from 'rxjs';
 })
 export class WebsocketService {
 
-  private subject!: Subject<MessageEvent>;
+  private subjects: {[url: string ]: Subject<MessageEvent>} = {};
 
   constructor() { }
 
   public connect(url:string): Subject<MessageEvent> {
-    if (!this.subject){
-      this.subject = this.create(url);
+    if (!this.subjects[url]){
+      this.subjects[url] = this.create(url);
     }
-    return this.subject;
+    return this.subjects[url];
   }
 
   private create(url:string): Subject<MessageEvent>{
@@ -23,7 +23,10 @@ export class WebsocketService {
     const observable = new Observable((obs) => {
       ws.onmessage = obs.next.bind(obs);
       ws.onerror = obs.error.bind(obs);
-      ws.onclose = obs.complete.bind(obs);
+      ws.onclose = () => {
+        obs.complete.bind(obs)();
+        delete this.subjects[url]; // Remove the subject when the connection closes
+      };
       return ws.close.bind(ws);
     });
 

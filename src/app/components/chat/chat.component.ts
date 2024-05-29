@@ -7,11 +7,12 @@ import { Router, RouterOutlet } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { UserCardComponent } from '../user-card/user-card.component';
 import { UserProfile } from '../../interfaces/userProfile.interface';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, UserCardComponent],
+  imports: [CommonModule, UserCardComponent, FormsModule],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css',
   providers: [UserService]
@@ -22,6 +23,8 @@ export class ChatComponent implements OnInit {
   public messages: string[] = [];
   public userProfile: UserProfile | null = null;
   private connection: any;
+  public roomName: string = '';
+  public isInRoom: boolean = false;
 
   constructor(
     private WebsocketService: WebsocketService,
@@ -40,12 +43,12 @@ export class ChatComponent implements OnInit {
       // Update user profile in UserService
       this.userService.setUserProfile(this.userProfile);
 
-      // Only establish WebSocket connection if running in the browser
+      /* Only establish WebSocket connection if running in the browser
       this.connection = this.WebsocketService.connect(this.wsUrl);
 
       this.connection.subscribe((event: MessageEvent) => {
         this.messages.push(event.data);
-      });
+      }); */
     }
   }
 
@@ -80,6 +83,25 @@ export class ChatComponent implements OnInit {
     this.router.navigate(['/']).then(() => {
       window.location.reload();
     });
+  }
+
+  joinRoom(){
+    if (this.roomName.trim() === "") {
+      alert('Select a chat room!');
+      return;
+    }
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.connection = this.WebsocketService.connect(`${this.wsUrl}?room=${this.roomName}`);
+
+      this.connection.subscribe((event: MessageEvent) => {
+        this.messages.push(event.data);
+      });
+
+      this.isInRoom = true;
+      this.messages.push(`Welcome to ${this.roomName}`)
+    }
+
   }
 }
 
