@@ -11,53 +11,17 @@
   </div>
 
   <!-- Chat Section -->
-<div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-6">
-  <h1 class="text-2xl font-semibold mb-4 text-center">
-    WebSocket Client Chat
-  </h1>
-  <!-- Room Selection Section -->
-<div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-6 mb-6">
-  <select
-    [(ngModel)]="roomName"
-    class="w-full py-2 px-4 bg-white text-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
-  >
-    <option value="" disabled selected>Select a room...</option>
-    <option value="General">General</option>
-    <option value="Sports">Sports</option>
-    <option value="Tech">Tech</option>
-  </select>
-  <button
-    (click)="joinRoom()"
-    class="mt-4 w-full py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
-  >
-    Join Room
-  </button>
-</div>
-
-  
-  <!-- Chat Window -->
-  <div class="h-60 overflow-y-auto border border-gray-300 rounded-lg p-4">
-    <!-- Messages will be displayed here -->
-    <div *ngFor="let message of messages" class="mb-2">
-      {{ message }}
-    </div>
-  </div>
-  
-  <!-- Input and Send Button Section -->
-  <div class="mt-4 flex">
-    <input
-      id='messageInput'
-      #messageInput
-      class="flex-1 py-2 px-4 bg-white text-gray-800 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
-      type="text"
-      placeholder="Type a message..."
-      (keydown.enter)="sendMessage(messageInput.value)"
-    />
-    <button
-      (click)="sendMessage(messageInput.value)"
-      class="py-2 px-4 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
-    >
-      Send
-    </button>
+  <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-6">
+    <h1 class="text-2xl font-semibold mb-4 text-center">
+      WebSocket Client Chat
+    </h1>
+    <!-- Room Selection Section -->
+    <app-select-room (roomSelected)="joinRoom($event)"> </app-select-room>
+    
+    <!-- Chat Window -->
+    <app-chat-window [messages]="messages"></app-chat-window>
+    
+    <!-- Input and Send Button Section -->
+    <app-message-input (messageSent)="sendMessage($event)"></app-message-input>
   </div>
 </div>

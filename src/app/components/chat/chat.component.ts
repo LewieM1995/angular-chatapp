@@ -3,16 +3,19 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
 import { WebsocketService } from '../../services/websocket.service';
 import { CommonModule } from '@angular/common';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { UserCardComponent } from '../user-card/user-card.component';
 import { UserProfile } from '../../interfaces/userProfile.interface';
 import { FormsModule } from '@angular/forms';
+import { SelectRoomComponent } from './select-room/select-room.component';
+import { ChatWindowComponent } from './chat-window/chat-window.component';
+import { MessageInputComponent } from './message-input/message-input.component';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, UserCardComponent, FormsModule],
+  imports: [CommonModule, UserCardComponent, FormsModule, SelectRoomComponent, ChatWindowComponent, MessageInputComponent],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css',
   providers: [UserService]
@@ -79,8 +82,9 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  joinRoom(){
-    if (this.roomName.trim() === "") {
+  joinRoom(roomName: string){
+    this.roomName = roomName;
+    if (roomName.trim() === "") {
       alert('Select a chat room!');
       return;
     }
