@@ -15,6 +15,14 @@ export class MessageInputComponent {
   sendMessage(message: string) {
     if (message.trim()) {
       this.messageSent.emit(message);
+      this.clearInputField();
+    }
+  }
+
+  clearInputField() {
+    const inputElement = document.getElementById('messageInput') as HTMLInputElement;
+    if (inputElement) {
+      inputElement.value = '';
     }
   }
 

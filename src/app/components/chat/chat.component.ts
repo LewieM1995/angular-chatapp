@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { SelectRoomComponent } from './select-room/select-room.component';
 import { ChatWindowComponent } from './chat-window/chat-window.component';
 import { MessageInputComponent } from './message-input/message-input.component';
+import { connect } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -54,16 +55,9 @@ export class ChatComponent implements OnInit {
       const userName = this.userProfile?.name || "Anonymous";
       const messageWithUser = `${userName}: ${message}`;
       this.connection.next(messageWithUser);
-      this.clearInputField();
     }
   }
 
-  clearInputField() {
-    const inputElement = document.getElementById('messageInput') as HTMLInputElement;
-    if (inputElement) {
-      inputElement.value = '';
-    }
-  }
 
   onSignOut() {
     // Clear user profile and session data
@@ -73,7 +67,7 @@ export class ChatComponent implements OnInit {
 
     // Close WebSocket connection if it exists
     if (this.connection) {
-      this.connection.complete();
+      this.connection.close();
     }
 
     // Redirect to home page
@@ -82,24 +76,42 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  joinRoom(roomName: string){
-    this.roomName = roomName;
-    if (roomName.trim() === "") {
+  joinRoom(roomName: string) {
+    if (!roomName || roomName.trim() === "") {
       alert('Select a chat room!');
       return;
     }
-
+  
     if (isPlatformBrowser(this.platformId)) {
+      const previousRoomName = this.roomName;
+      this.roomName = roomName;
+  
+      // Unsubscribe from the previous connection if there is one
+      if (this.connection) {
+        // Prepare the disconnection message for the previous room
+        const disconnectionMessage = `You have left ${previousRoomName}`;
+        // Unsubscribe from the previous connection
+        this.connection.unsubscribe();
+        // Disconnection message
+        this.messages.push(disconnectionMessage);
+      }
+  
+      // Establish a new connection for the selected room
       this.connection = this.WebsocketService.connect(`${this.wsUrl}?room=${this.roomName}`);
-
+  
+      // Add the welcome message for the new room
+      this.messages.push(`Welcome to ${this.roomName}`);
+  
+      // Subscribe to the new connection
       this.connection.subscribe((event: MessageEvent) => {
         this.messages.push(event.data);
       });
-
+  
+      // Update the flag indicating the user is in a room
       this.isInRoom = true;
-      this.messages.push(`Welcome to ${this.roomName}`)
     }
-
   }
+  
+  
 }
 
