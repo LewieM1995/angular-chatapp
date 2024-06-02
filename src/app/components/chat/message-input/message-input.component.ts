@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 
 @Component({
   selector: 'app-message-input',
@@ -11,6 +11,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 export class MessageInputComponent {
 
   @Output() messageSent = new EventEmitter<string>();
+  @Input() isInRoom: boolean = false;
 
   sendMessage(message: string) {
     if (message.trim()) {

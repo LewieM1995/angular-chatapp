@@ -19,6 +19,6 @@
     <app-chat-window [messages]="messages"></app-chat-window>
     
     <!-- Input and Send Button Section -->
-    <app-message-input (messageSent)="sendMessage($event)"></app-message-input>
+    <app-message-input [isInRoom]="isInRoom" (messageSent)="sendMessage($event)"></app-message-input>
   </div>
 </div>
