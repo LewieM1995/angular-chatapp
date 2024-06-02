@@ -29,6 +29,7 @@ export class ChatComponent implements OnInit {
   private connection: any;
   public roomName: string = '';
   public isInRoom: boolean = false;
+  public userCount: number = 0;
 
   constructor(
     private WebsocketService: WebsocketService,
@@ -50,7 +51,7 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  sendMessage(message: string) {
+  hanldeMessage(message: string) {
     if (this.connection) {
       const userName = this.userProfile?.name || "Anonymous";
       const messageWithUser = `${userName}: ${message}`;
@@ -120,10 +121,23 @@ export class ChatComponent implements OnInit {
       this.connection.subscribe((event: MessageEvent) => {
         this.messages.push(event.data);
       });
+
+      // Subscribe to user count updates
+      this.WebsocketService.connectUserCount(`${this.wsUrl}?room=${this.roomName}`).subscribe((count: number) => {
+        this.userCount = count;
+      })
   
       // Update the flag indicating the user is in a room
       this.isInRoom = true;
     }
+  }
+
+  isUserCountMessage(message: string): boolean {
+    return message.startsWith(`User Count:`)
+  }
+
+  getFilteredMessages(): string[] {
+    return this.messages.filter(message => !this.isUserCountMessage(message))
   }
   
 }

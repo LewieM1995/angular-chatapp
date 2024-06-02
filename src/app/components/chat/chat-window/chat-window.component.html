@@ -1,5 +1,16 @@
-<div class="h-60 overflow-y-auto border border-gray-300 rounded-lg p-4">
-    <div *ngFor="let message of messages" class="mb-2">
-      {{ message }}
+<div class="relative">
+  <!-- User count display -->
+<div class="absolute top-2 right-2 w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-sm font-bold" title="Active Users">
+  <abbr title="Active Users">A</abbr> {{ userCount }}
+</div>
+
+
+  <!-- Chat messages -->
+  <div class="mt-16">
+    <div class="h-60 overflow-y-auto border border-gray-300 rounded-lg p-4">
+      <div *ngFor="let message of messages" class="mb-2" >
+        {{ message }}
+      </div>
     </div>
   </div>
+</div>

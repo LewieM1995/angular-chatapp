@@ -10,4 +10,6 @@ import { Component, Input } from '@angular/core';
 })
 export class ChatWindowComponent {
   @Input() messages: string[] = [];
+  @Input() userCount: number = 0;
+
 }

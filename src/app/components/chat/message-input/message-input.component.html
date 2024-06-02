@@ -5,10 +5,10 @@
       class="flex-1 py-2 px-4 bg-white text-gray-800 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
       type="text"
       placeholder="Type a message..."
-      (keydown.enter)="sendMessage(messageInput.value)"
+      (keydown.enter)="emitMessage(messageInput.value)"
     />
     <button
-      (click)="sendMessage(messageInput.value)"
+      (click)="emitMessage(messageInput.value)"
       [disabled]="!isInRoom"
       class="py-2 px-4 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
       [ngClass]="{

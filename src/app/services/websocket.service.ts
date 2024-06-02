@@ -7,6 +7,7 @@ import { Observable, Subject } from 'rxjs';
 export class WebsocketService {
 
   private subjects: {[url: string ]: Subject<MessageEvent>} = {};
+  private userCounts: {[url:string]: Subject<number>} = {};
 
   constructor() { }
 
@@ -17,11 +18,25 @@ export class WebsocketService {
     return this.subjects[url];
   }
 
+  public connectUserCount(url: string): Subject<number> {
+    if (!this.userCounts[url]){
+      this.userCounts[url] = new Subject<number>();
+    }
+    return this.userCounts[url];
+  }
+
   private create(url:string): Subject<MessageEvent>{
     const ws = new WebSocket(url);  
     
     const observable = new Observable((obs) => {
-      ws.onmessage = obs.next.bind(obs);
+      ws.onmessage = (messageEvent) => {
+        obs.next(messageEvent);
+
+        if(messageEvent.data.startsWith('User Count:')){
+          const userCount = parseInt(messageEvent.data.split(':')[1].trim());
+          this.userCounts[url].next(userCount);
+        }
+      }
       ws.onerror = obs.error.bind(obs);
       ws.onclose = () => {
         obs.complete.bind(obs)();
@@ -39,6 +54,5 @@ export class WebsocketService {
     };
     return Subject.create(observer, observable);
   }
-
 
 }

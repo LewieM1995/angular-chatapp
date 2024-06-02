@@ -13,7 +13,7 @@ export class MessageInputComponent {
   @Output() messageSent = new EventEmitter<string>();
   @Input() isInRoom: boolean = false;
 
-  sendMessage(message: string) {
+  emitMessage(message: string) {
     if (message.trim()) {
       this.messageSent.emit(message);
       this.clearInputField();
