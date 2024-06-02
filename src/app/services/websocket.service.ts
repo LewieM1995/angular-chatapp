@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { catchError, Observable, Subject, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -37,13 +37,23 @@ export class WebsocketService {
           this.userCounts[url].next(userCount);
         }
       }
-      ws.onerror = obs.error.bind(obs);
+      ws.onerror = (errorEvent) => {
+        obs.error(errorEvent);
+      }
       ws.onclose = () => {
-        obs.complete.bind(obs)();
+        obs.complete();
         delete this.subjects[url]; // Remove the subject when the connection closes
       };
-      return ws.close.bind(ws);
-    });
+      return () => {
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.close();
+        }
+      };
+    }).pipe(catchError((error) => {
+      console.error(`Websocket connection error: ${url}`, error);
+      return throwError(() => error);
+    })
+  )
 
     const observer = {
       next: (data: Object) => {

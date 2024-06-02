@@ -1,24 +1,22 @@
-
-<h1 class="text-2xl font-semibold mb-4 text-center">
-  WebSocket Client Chat
-</h1>
+<h1 class="text-2xl font-semibold mb-4 text-center">WebSocket Client Chat</h1>
 <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-6 mb-6">
-    <select
-      [(ngModel)]="selectedRoom"
-      class="w-full py-2 px-4 bg-white text-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
-    >
-      <option value="" disabled selected>Select a room...</option>
-      <option value="General">General</option>
-      <option value="Sports">Sports</option>
-      <option value="Tech">Tech</option>
-    </select>
-    <button (click)="isInRoom ? leaveRoom() : joinRoom()"
+  <select
+    [(ngModel)]="selectedRoom"
+    class="w-full py-2 px-4 bg-white text-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+  >
+    <option value="" disabled selected>Select a room...</option>
+    <option value="General">General</option>
+    <option value="Sports">Sports</option>
+    <option value="Tech">Tech</option>
+  </select>
+  <button
+    (click)="isInRoom ? leaveRoom() : joinRoom()"
     class="mt-4 w-full py-2 px-4 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-opacity-50"
     [ngClass]="{
       'bg-green-500 hover:bg-green-600 focus:ring-green-600': !isInRoom,
       'bg-red-500 hover:bg-red-600 focus:ring-red-600': isInRoom
     }"
-    >
-    {{isInRoom ? 'Leave Room' : 'Join Room'}}
-    </button>
-  </div>
+  >
+    {{ isInRoom ? "Leave Room" : "Join Room" }}
+  </button>
+</div>

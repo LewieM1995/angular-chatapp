@@ -16,7 +16,13 @@ import { MessageInputComponent } from './message-input/message-input.component';
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, UserCardComponent, FormsModule, SelectRoomComponent, ChatWindowComponent, MessageInputComponent],
+  imports: [CommonModule,
+    UserCardComponent,
+    FormsModule,
+    SelectRoomComponent,
+    ChatWindowComponent,
+    MessageInputComponent
+  ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css',
   providers: [UserService]
@@ -32,7 +38,7 @@ export class ChatComponent implements OnInit {
   public userCount: number = 0;
 
   constructor(
-    private WebsocketService: WebsocketService,
+    private websocketService: WebsocketService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
     private userService: UserService
@@ -44,16 +50,15 @@ export class ChatComponent implements OnInit {
       const userProfile = sessionStorage.getItem("loggedInUser");
       //console.log(userProfile);
       this.userProfile = userProfile ? JSON.parse(userProfile) : null;
-
       // Update user profile in UserService
       this.userService.setUserProfile(this.userProfile);
 
     }
   }
 
-  hanldeMessage(message: string) {
+  handleMessage(message: string) {
     if (this.connection) {
-      const userName = this.userProfile?.name || "Anonymous";
+      const userName = this.userProfile?.name;
       const messageWithUser = `${userName}: ${message}`;
       this.connection.next(messageWithUser);
     }
@@ -65,30 +70,28 @@ export class ChatComponent implements OnInit {
     this.userProfile = null;
     sessionStorage.removeItem("loggedInUser");
     this.userService.clearUserProfile();
-
     // Close WebSocket connection if it exists
     if (this.connection) {
       this.connection.close();
     }
-
     // Redirect to home page
     this.router.navigate(['/']).then(() => {
       window.location.reload();
     });
   }
 
-  leaveRoom(){
-      if (this.connection) {
-        // Prepare the disconnection message for the previous room
-        const disconnectionMessage = `You have left ${this.roomName}`;
-        // Unsubscribe from the previous connection
-        this.connection.unsubscribe();
-        // Disconnection message
-        this.messages.push(disconnectionMessage);
-        this.connection = null;
-        this.roomName = '';
-        this.isInRoom = false;
-      }
+  leaveRoom() {
+    if (this.connection) {
+      // Prepare the disconnection message for the previous room
+      const disconnectionMessage = `You have left ${this.roomName}`;
+      // Unsubscribe from the previous connection
+      this.connection.unsubscribe();
+      // Disconnection message
+      this.messages.push(disconnectionMessage);
+      this.connection = null;
+      this.roomName = '';
+      this.isInRoom = false;
+    }
   }
 
   joinRoom(roomName: string) {
@@ -96,11 +99,10 @@ export class ChatComponent implements OnInit {
       alert('Select a chat room!');
       return;
     }
-  
+
     if (isPlatformBrowser(this.platformId)) {
       const previousRoomName = this.roomName;
       this.roomName = roomName;
-  
       // Unsubscribe from the previous connection if there is one
       if (this.connection) {
         // Prepare the disconnection message for the previous room
@@ -110,23 +112,18 @@ export class ChatComponent implements OnInit {
         // Disconnection message
         this.messages.push(disconnectionMessage);
       }
-  
       // Establish a new connection for the selected room
-      this.connection = this.WebsocketService.connect(`${this.wsUrl}?room=${this.roomName}`);
-  
+      this.connection = this.websocketService.connect(`${this.wsUrl}?room=${this.roomName}`);
       // Add the welcome message for the new room
       this.messages.push(`Welcome to ${this.roomName}`);
-  
       // Subscribe to the new connection
       this.connection.subscribe((event: MessageEvent) => {
         this.messages.push(event.data);
       });
-
       // Subscribe to user count updates
-      this.WebsocketService.connectUserCount(`${this.wsUrl}?room=${this.roomName}`).subscribe((count: number) => {
+      this.websocketService.connectUserCount(`${this.wsUrl}?room=${this.roomName}`).subscribe((count: number) => {
         this.userCount = count;
       })
-  
       // Update the flag indicating the user is in a room
       this.isInRoom = true;
     }
@@ -139,6 +136,5 @@ export class ChatComponent implements OnInit {
   getFilteredMessages(): string[] {
     return this.messages.filter(message => !this.isUserCountMessage(message))
   }
-  
 }
 

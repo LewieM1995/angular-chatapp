@@ -16,7 +16,7 @@ export class SelectRoomComponent {
   @Input() isInRoom: boolean = false;
 
   selectedRoom: string = '';
- 
+
   joinRoom() {
     if (this.selectedRoom) {
       this.roomSelected.emit(this.selectedRoom);
@@ -25,7 +25,7 @@ export class SelectRoomComponent {
     }
   }
 
-  leaveRoom(){
+  leaveRoom() {
     this.leaveRoomEvent.emit();
   }
 }

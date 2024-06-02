@@ -13,12 +13,23 @@
   <!-- Chat Section -->
   <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-6">
     <!-- Room Selection Section -->
-    <app-select-room (roomSelected)="joinRoom($event)" (leaveRoomEvent)="leaveRoom()" [isInRoom]="isInRoom"> </app-select-room>
-    
+    <app-select-room
+      (roomSelected)="joinRoom($event)"
+      (leaveRoomEvent)="leaveRoom()"
+      [isInRoom]="isInRoom"
+    >
+    </app-select-room>
+
     <!-- Chat Window -->
-    <app-chat-window [messages]="getFilteredMessages()" [userCount]="userCount"></app-chat-window>
-    
+    <app-chat-window
+      [messages]="getFilteredMessages()"
+      [userCount]="userCount"
+    ></app-chat-window>
+
     <!-- Input and Send Button Section -->
-    <app-message-input [isInRoom]="isInRoom" (messageSent)="hanldeMessage($event)"></app-message-input>
+    <app-message-input
+      [isInRoom]="isInRoom"
+      (messageSent)="handleMessage($event)"
+    ></app-message-input>
   </div>
 </div>
