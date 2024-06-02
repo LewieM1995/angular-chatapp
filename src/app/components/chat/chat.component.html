@@ -12,11 +12,8 @@
 
   <!-- Chat Section -->
   <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-6">
-    <h1 class="text-2xl font-semibold mb-4 text-center">
-      WebSocket Client Chat
-    </h1>
     <!-- Room Selection Section -->
-    <app-select-room (roomSelected)="joinRoom($event)"> </app-select-room>
+    <app-select-room (roomSelected)="joinRoom($event)" (leaveRoomEvent)="leaveRoom()" [isInRoom]="isInRoom"> </app-select-room>
     
     <!-- Chat Window -->
     <app-chat-window [messages]="messages"></app-chat-window>

@@ -1,3 +1,7 @@
+
+<h1 class="text-2xl font-semibold mb-4 text-center">
+  WebSocket Client Chat
+</h1>
 <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-6 mb-6">
     <select
       [(ngModel)]="selectedRoom"
@@ -8,10 +12,13 @@
       <option value="Sports">Sports</option>
       <option value="Tech">Tech</option>
     </select>
-    <button
-      (click)="joinRoom()"
-      class="mt-4 w-full py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
+    <button (click)="isInRoom ? leaveRoom() : joinRoom()"
+    class="mt-4 w-full py-2 px-4 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-opacity-50"
+    [ngClass]="{
+      'bg-green-500 hover:bg-green-600 focus:ring-green-600': !isInRoom,
+      'bg-red-500 hover:bg-red-600 focus:ring-red-600': isInRoom
+    }"
     >
-      Join Room
+    {{isInRoom ? 'Leave Room' : 'Join Room'}}
     </button>
   </div>

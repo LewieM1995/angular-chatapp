@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
 import { WebsocketService } from '../../services/websocket.service';
@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { SelectRoomComponent } from './select-room/select-room.component';
 import { ChatWindowComponent } from './chat-window/chat-window.component';
 import { MessageInputComponent } from './message-input/message-input.component';
-import { connect } from 'rxjs';
+
 
 @Component({
   selector: 'app-chat',
@@ -76,8 +76,22 @@ export class ChatComponent implements OnInit {
     });
   }
 
+  leaveRoom(){
+      if (this.connection) {
+        // Prepare the disconnection message for the previous room
+        const disconnectionMessage = `You have left ${this.roomName}`;
+        // Unsubscribe from the previous connection
+        this.connection.unsubscribe();
+        // Disconnection message
+        this.messages.push(disconnectionMessage);
+        this.connection = null;
+        this.roomName = '';
+        this.isInRoom = false;
+      }
+  }
+
   joinRoom(roomName: string) {
-    if (!roomName || roomName.trim() === "") {
+    if (!roomName) {
       alert('Select a chat room!');
       return;
     }
@@ -111,7 +125,6 @@ export class ChatComponent implements OnInit {
       this.isInRoom = true;
     }
   }
-  
   
 }
 
