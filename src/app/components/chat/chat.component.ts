@@ -25,7 +25,6 @@ import { MessageInputComponent } from './message-input/message-input.component';
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css',
-  providers: [UserService]
 })
 export class ChatComponent implements OnInit {
 
