@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Output, Input, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-message-input',
@@ -12,6 +12,7 @@ export class MessageInputComponent {
 
   @Output() messageSent = new EventEmitter<string>();
   @Input() isInRoom: boolean = false;
+  @ViewChild('messageInput') messageInput!: ElementRef<HTMLInputElement>;
 
   emitMessage(message: string) {
     if (message.trim()) {
@@ -21,9 +22,8 @@ export class MessageInputComponent {
   }
 
   clearInputField() {
-    const inputElement = document.getElementById('messageInput') as HTMLInputElement;
-    if (inputElement) {
-      inputElement.value = '';
+    if (this.messageInput) {
+      this.messageInput.nativeElement.value = '';
     }
   }
 

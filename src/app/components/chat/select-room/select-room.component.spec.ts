@@ -20,4 +20,20 @@ describe('SelectRoomComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should emit roomSelected event when joinRoom is called', () => {
+    const roomName = 'testRoom';
+    const spyItem = jest.spyOn(component.roomSelected, 'emit');
+    component.selectedRoom = roomName;
+    component.joinRoom();
+    expect(spyItem).toHaveBeenCalled();
+  });
+
+  it('should emit leaveRoomEvent when leaveRoom is called', () => {
+    const spyItem = jest.spyOn(component.leaveRoomEvent, 'emit');
+    component.leaveRoom();
+    expect(spyItem).toHaveBeenCalled();
+  });
+
+
 });

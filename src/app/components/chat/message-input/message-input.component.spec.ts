@@ -20,4 +20,19 @@ describe('MessageInputComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+
+  it('should emit Message event when emitMessage is called', () => {
+    const message = "Hello There";
+    const spyItem = jest.spyOn(component.messageSent, 'emit');
+    component.emitMessage(message);
+    expect(spyItem).toHaveBeenCalled();
+  });
+
+  it('should clear input field', () => {
+    component.messageInput.nativeElement.value = 'Test Message';
+    component.clearInputField();
+    expect(component.messageInput.nativeElement.value).toEqual('');
+  });
+
 });
