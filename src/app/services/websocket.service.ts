@@ -31,11 +31,9 @@ export class WebsocketService {
     const observable = new Observable((obs) => {
       ws.onmessage = (messageEvent) => {
         obs.next(messageEvent);
+        console.log(messageEvent)
 
-        if(messageEvent.data.startsWith('User Count:')){
-          const userCount = parseInt(messageEvent.data.split(':')[1].trim());
-          this.userCounts[url].next(userCount);
-        }
+        this.handleUserCountMessage(url, messageEvent);
       }
       ws.onerror = (errorEvent) => {
         obs.error(errorEvent);
@@ -63,6 +61,14 @@ export class WebsocketService {
       }
     };
     return Subject.create(observer, observable);
+  }
+
+
+  private handleUserCountMessage(url: string, messageEvent: MessageEvent): void {
+    if (messageEvent.data.startsWith('User Count:')) {
+      const userCount = parseInt(messageEvent.data.split(':')[1].trim());
+      this.userCounts[url].next(userCount);
+    }
   }
 
 }

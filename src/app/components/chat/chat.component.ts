@@ -90,6 +90,7 @@ export class ChatComponent implements OnInit {
       this.connection = null;
       this.roomName = '';
       this.isInRoom = false;
+      this.userCount = this.userCount - 1;
     }
   }
 

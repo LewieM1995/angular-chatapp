@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { jest } from '@jest/globals';
 import { ChatWindowComponent } from './chat-window.component';
 
 describe('ChatWindowComponent', () => {
